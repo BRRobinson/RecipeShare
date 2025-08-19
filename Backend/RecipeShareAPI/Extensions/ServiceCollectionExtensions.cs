@@ -25,7 +25,10 @@ namespace RecipeShareAPI.Extensions
                     policy.WithOrigins("http://localhost", "https://localhost")
                           .AllowAnyHeader()
                           .AllowAnyMethod();
-                });
+					policy.SetIsOriginAllowed(origin => new Uri(origin).Host == "localhost")
+	                  .AllowAnyHeader()
+	                  .AllowAnyMethod();
+				});
             });
 
 			services.Configure<AppSettings>(configuration.GetSection("AppSettings"));

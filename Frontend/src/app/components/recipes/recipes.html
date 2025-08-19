@@ -1,0 +1,36 @@
+<div class="container mt-3">
+  <button class="my-3" mat-button (click)="this.insertRecipe()">Insert Recipe</button>
+  <div class="row">
+    <div class="col-md-6 mb-3" *ngFor="let recipe of recipes">
+      <mat-card appearance="outlined" (click)="this.editRecipe(recipe.id)">
+        <mat-card-header>
+          <mat-card-title><h3>{{ recipe.title }}</h3></mat-card-title>
+          <mat-card-subtitle>
+            <p>{{ recipe.cookingTimeMinutes }} Minutes</p>
+            <div class="d-flex flex-wrap" >
+                <p *ngFor="let dietaryTag of recipe.dietaryTags" class="border rounded d-inline-block m-1 px-2 py-1">
+                  {{ dietaryTag }}
+                </p>
+            </div>
+          </mat-card-subtitle>
+        </mat-card-header>
+        <mat-divider></mat-divider>
+        <mat-card-content class="mt-3">
+          <div>
+            <h5>Ingredients:</h5>
+            <div *ngFor="let ingredient of recipe.ingredients">
+              <p class="secondary me-1">{{ ingredient }}</p>
+            </div>
+          </div>
+          <div>
+            <h5>Steps:</h5>
+            <div *ngFor="let step of recipe.steps">
+              <p class="secondary me-1">{{ step }}</p>
+            </div>
+          </div>
+          <button mat-button (click)="this.deleteRecipe(recipe.id); $event.stopPropagation()">Delete</button>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

@@ -7,18 +7,19 @@ namespace RecipeShareAPI.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class RecipeController : ControllerBase
+    public class RecipesController : ControllerBase
     {
-        private readonly ILogger<RecipeController> _logger;
+        private readonly ILogger<RecipesController> _logger;
 		private readonly IRecipeManager _recipeManager;
 
-		public RecipeController(ILogger<RecipeController> logger, IRecipeManager recipeManager)
+		public RecipesController(ILogger<RecipesController> logger, IRecipeManager recipeManager)
         {
             _logger = logger;
 			_recipeManager = recipeManager;
 		}
 
-		[HttpGet("GetAllRecipes")]
+		// GET /recipes
+		[HttpGet]
 		public IActionResult GetAllRecipes()
 		{
 			try
@@ -32,7 +33,8 @@ namespace RecipeShareAPI.Controllers
 			}
 		}
 
-		[HttpGet("GetRecipeByID")]
+		// GET /recipes/GetRecipeById/{id}
+		[HttpGet("GetRecipeByID/{id}")]
 		public IActionResult GetRecipeByID(int id)
 		{
 			try
@@ -46,8 +48,9 @@ namespace RecipeShareAPI.Controllers
 			}
 		}
 
-		[HttpPost("InsertRecipe")]
-		public IActionResult InsertRecipe(Recipe recipe)
+		// POST /recipes
+		[HttpPost]
+		public IActionResult InsertRecipe([FromBody] Recipe recipe)
 		{
 			try
 			{
@@ -60,8 +63,9 @@ namespace RecipeShareAPI.Controllers
 			}
 		}
 
-		[HttpPost("UpdateRecipe")]
-		public IActionResult UpdateRecipe(Recipe recipe)
+		// PUT /recipes/{id}
+		[HttpPut("{id}")]
+		public IActionResult UpdateRecipe(int id, [FromBody] Recipe recipe)
 		{
 			try
 			{
@@ -74,7 +78,8 @@ namespace RecipeShareAPI.Controllers
 			}
 		}
 
-		[HttpPost("DeleteRecipe")]
+		// DELETE /recipes/{id}
+		[HttpDelete("{id}")]
 		public IActionResult DeleteRecipe(int id)
 		{
 			try
