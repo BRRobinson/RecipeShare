@@ -4,15 +4,17 @@ namespace RecipeShare.API.Interfaces
 {
 	public interface IRecipeManager
 	{
-		public List<Recipe> GetAllRecipes();
+		public ReturnResult<List<Recipe>> GetAllRecipes();
 
-		public Recipe GetRecipeByID(int id);
+		public ReturnResult<List<Recipe>> GetRecipeByDietaryTag(string dietaryTag);
 
-		public Recipe InsertRecipe(Recipe recipe);
+		public ReturnResult<Recipe> GetRecipeByID(int id);
 
-		public Recipe UpdateRecipe(Recipe recipe);
+		public ReturnResult<Recipe> InsertRecipe(Recipe recipe);
 
-		public void DeleteRecipe(int id);
+		public ReturnResult<Recipe> UpdateRecipe(Recipe recipe);
+
+		public ReturnResult DeleteRecipe(int id);
 
 	}
 }

@@ -14,61 +14,85 @@ namespace RecipeShare.API.Managers
 			_sqlContext = dbContext;
 		}
 
-		public List<Recipe> GetAllRecipes()
+		public ReturnResult<List<Recipe>> GetAllRecipes()
 		{
-			return _sqlContext.Set<Recipe>().ToList();
+			var recipes = _sqlContext.Set<Recipe>().ToList();
+
+			return ReturnResult<List<Recipe>>.Success(recipes, "Recipes retrieved successfully.");
 		}
 
-		public Recipe GetRecipeByID(int id)
+		public ReturnResult<List<Recipe>> GetRecipeByDietaryTag(string dietaryTag)
+		{
+			var recipes = _sqlContext.Set<Recipe>().Where(r => r.DietaryTags.Contains(dietaryTag)).ToList();
+
+			return ReturnResult<List<Recipe>>.Success(recipes, "Recipes retrieved successfully.");
+		}
+
+		public ReturnResult<Recipe> GetRecipeByID(int id)
 		{
 			var recipe = _sqlContext.Set<Recipe>().Find(id);
 			if (recipe == null)
-			{
-				throw new KeyNotFoundException($"Recipe with ID {id} not found.");
-			}
-			return recipe;
+				return ReturnResult<Recipe>.Failed(default!, $"Recipe with ID {id} not found.");
+
+			return ReturnResult<Recipe>.Success(recipe);
 		}
 
-		public Recipe InsertRecipe(Recipe recipe)
+		public ReturnResult<Recipe> InsertRecipe(Recipe recipe)
 		{
-			if (recipe == null)
-			{
-				throw new ArgumentNullException(nameof(recipe), "Recipe cannot be null.");
-			}
-			if (string.IsNullOrWhiteSpace(recipe.Title))
-			{
-				throw new ArgumentException("Recipe title is required.", nameof(Recipe.Title));
-			}
+			var validateResult = ValidateRecipe(recipe);
+
+			if (!validateResult.IsSuccess)
+				return validateResult;
+
 			_sqlContext.Set<Recipe>().Add(recipe);
 			_sqlContext.SaveChanges();
-			return recipe;
+
+			return ReturnResult<Recipe>.Success(recipe, "Recipe inserted successfully.");
 		}
 
-		public Recipe UpdateRecipe(Recipe recipe)
+		public ReturnResult<Recipe> UpdateRecipe(Recipe recipe)
 		{
-			if (recipe == null)
-			{
-				throw new ArgumentNullException(nameof(recipe), "Recipe cannot be null.");
-			}
-			if (string.IsNullOrWhiteSpace(recipe.Title))
-			{
-				throw new ArgumentException("Recipe title is required.", nameof(Recipe.Title));
-			}
+			var validateResult = ValidateRecipe(recipe);
+
+			if (!validateResult.IsSuccess)
+				return validateResult;
+
 			_sqlContext.Set<Recipe>().Update(recipe);
 			_sqlContext.SaveChanges();
-			return recipe;
+
+			return ReturnResult<Recipe>.Success(recipe, "Recipe updated successfully.");
 		}
 
-		public void DeleteRecipe(int id)
+		public ReturnResult DeleteRecipe(int id)
 		{
 			var recipe = _sqlContext.Set<Recipe>().Find(id);
 			if (recipe == null)
-			{
-				throw new KeyNotFoundException($"Recipe with ID {id} not found.");
-			}
+				return ReturnResult<Recipe>.Failed(default!, $"Recipe with ID {id} not found.");
+
 			_sqlContext.Set<Recipe>().Remove(recipe);
 			_sqlContext.SaveChanges();
+
+			return ReturnResult.Success("Recipe deleted successfully.");
 		}
 
+		public ReturnResult<Recipe> ValidateRecipe(Recipe recipe)
+		{
+			if (recipe == null)
+				return ReturnResult<Recipe>.Failed(default!, "Recipe cannot be null.");
+
+			if (string.IsNullOrWhiteSpace(recipe.Title))
+				return ReturnResult<Recipe>.Failed(recipe, "Recipe title is required.");
+
+			if (recipe.Ingredients == null || recipe.Ingredients.Count == 0)
+				return ReturnResult<Recipe>.Failed(recipe, "Ingredients are required.");
+
+			if (recipe.Steps == null || recipe.Steps.Count == 0)
+				return ReturnResult<Recipe>.Failed(recipe, "Steps are required.");
+
+			if (recipe.CookingTime < 1)
+				return ReturnResult<Recipe>.Failed(recipe, "Cooking time must be at least 1 minute.");
+
+			return ReturnResult<Recipe>.Success(recipe, "Recipe is valid.");
+		}
 	}
 }

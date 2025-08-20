@@ -3,7 +3,7 @@ export class RecipeModel {
     title: string;
     ingredients: string[];
     steps: string[];
-    cookingTimeMinutes: number;
+    cookingTime: number;
     dietaryTags?: string[]; // Optional field for dietary tags
 
     constructor(
@@ -11,14 +11,14 @@ export class RecipeModel {
         title: string,
         ingredients: string[],
         steps: string[],
-        cookingTimeMinutes: number,
+        cookingTime: number,
         dietaryTags?: string[]
     ) {
         this.id = id;
         this.title = title;
         this.ingredients = ingredients;
         this.steps = steps;
-        this.cookingTimeMinutes = cookingTimeMinutes;
+        this.cookingTime = cookingTime;
         this.dietaryTags = dietaryTags || [];
     }
 }

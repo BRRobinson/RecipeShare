@@ -3,7 +3,7 @@ using RecipeShare.API.Interfaces;
 using RecipeShare.Database.Models;
 using System.Reflection.Metadata.Ecma335;
 
-namespace RecipeShareAPI.Controllers
+namespace RecipeShare.API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
@@ -25,6 +25,21 @@ namespace RecipeShareAPI.Controllers
 			try
 			{
 				return Ok(_recipeManager.GetAllRecipes());
+			}
+			catch (Exception e)
+			{
+				_logger.LogError(e, "An error occurred while fetching the recipes.");
+				return StatusCode(500, "Internal server error while fetching the recipes.");
+			}
+		}
+
+		// GET /recipes/GetRecipesByDietaryTags/{dietaryTag}
+		[HttpGet("GetRecipesByDietaryTags/{dietaryTag}")]
+		public IActionResult GetRecipeByDietaryTag(string dietaryTag)
+		{
+			try
+			{
+				return Ok(_recipeManager.GetRecipeByDietaryTag(dietaryTag));
 			}
 			catch (Exception e)
 			{
@@ -63,9 +78,9 @@ namespace RecipeShareAPI.Controllers
 			}
 		}
 
-		// PUT /recipes/{id}
-		[HttpPut("{id}")]
-		public IActionResult UpdateRecipe(int id, [FromBody] Recipe recipe)
+		// PUT /recipes
+		[HttpPut]
+		public IActionResult UpdateRecipe([FromBody] Recipe recipe)
 		{
 			try
 			{
@@ -84,8 +99,7 @@ namespace RecipeShareAPI.Controllers
 		{
 			try
 			{
-				_recipeManager.DeleteRecipe(id);
-				return Ok();
+				return Ok(_recipeManager.DeleteRecipe(id));
 			}
 			catch (Exception e)
 			{

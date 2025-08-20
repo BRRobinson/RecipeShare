@@ -17,7 +17,7 @@ namespace RecipeShare.Database.Models
 		public required List<string> Steps { get; set; }
 
 		[Range(1, int.MaxValue, ErrorMessage = "Cooking time must be at least 1 minute.")]
-		public int CookingTimeMinutes { get; set; }
+		public int CookingTime { get; set; }
 
 		[AllowNull]
 		public List<string> DietaryTags { get; set; }

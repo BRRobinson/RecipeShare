@@ -28,7 +28,7 @@ namespace RecipeShare.API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CookingTimeMinutes")
+                    b.Property<int>("CookingTime")
                         .HasColumnType("int");
 
                     b.Property<string>("DietaryTags")

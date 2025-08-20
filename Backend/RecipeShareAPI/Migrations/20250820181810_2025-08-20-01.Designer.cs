@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace RecipeShare.API.Migrations
 {
     [DbContext(typeof(SQLContext))]
-    [Migration("20250818220134_2025-08-19-01")]
-    partial class _2025081901
+    [Migration("20250820181810_2025-08-20-01")]
+    partial class _2025082001
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -31,7 +31,7 @@ namespace RecipeShare.API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CookingTimeMinutes")
+                    b.Property<int>("CookingTime")
                         .HasColumnType("int");
 
                     b.Property<string>("DietaryTags")

@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { Inject, Injectable } from '@angular/core';
 import { API_URL } from '../app.config';
 import { RecipeModel } from '../models/recipe.model'; // Adjust the path if your Recipe model is elsewhere
+import { ReturnResult } from '../models/return-result.model';
 
 @Injectable({
   providedIn: 'root'
@@ -10,23 +11,23 @@ import { RecipeModel } from '../models/recipe.model'; // Adjust the path if your
 export class RecipeShareService {
   constructor(private http: HttpClient, @Inject(API_URL) private apiUrl: string){}
 
-  getRecipes(): Observable<RecipeModel[]> {
-    return this.http.get<RecipeModel[]>(`${this.apiUrl}/recipes`);
+  getRecipes(): Observable<ReturnResult<RecipeModel[]>> {
+    return this.http.get<ReturnResult<RecipeModel[]>>(`${this.apiUrl}/recipes`);
   }
 
-  getRecipeById(id: number): Observable<RecipeModel> {
-    return this.http.get<RecipeModel>(`${this.apiUrl}/recipes/GetRecipeByID/${id}`, );
+  getRecipeById(id: number): Observable<ReturnResult<RecipeModel>> {
+    return this.http.get<ReturnResult<RecipeModel>>(`${this.apiUrl}/recipes/GetRecipeByID/${id}`, );
   }
   
-  insertRecipe(recipe: RecipeModel): Observable<RecipeModel> {
-    return this.http.post<RecipeModel>(`${this.apiUrl}/recipes`, recipe);
+  insertRecipe(recipe: RecipeModel): Observable<ReturnResult<RecipeModel>> {
+    return this.http.post<ReturnResult<RecipeModel>>(`${this.apiUrl}/recipes`, recipe);
   }
 
-  updateRecipe(id: number, recipe: RecipeModel): Observable<RecipeModel> {
-    return this.http.put<RecipeModel>(`${this.apiUrl}/recipes/${id}`, recipe);
+  updateRecipe(recipe: RecipeModel): Observable<ReturnResult<RecipeModel>> {
+    return this.http.put<ReturnResult<RecipeModel>>(`${this.apiUrl}/recipes`, recipe);
   }
 
-  deleteRecipe(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/recipes/${id}`);
+  deleteRecipe(id: number): Observable<ReturnResult<void>> {
+    return this.http.delete<ReturnResult<void>>(`${this.apiUrl}/recipes/${id}`);
   }
 }

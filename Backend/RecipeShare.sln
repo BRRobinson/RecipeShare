@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RecipeShare.Database", "Rec
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RecipeShare.Database.Models", "RecipeShare.Database.Models\RecipeShare.Database.Models.csproj", "{2A9CB428-F93C-4125-965D-5A621582273C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RecipeShare.Tests", "RecipeShare.Tests\RecipeShare.Tests.csproj", "{7375E751-BF4D-4EE1-B8DA-589B96154A59}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{2A9CB428-F93C-4125-965D-5A621582273C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2A9CB428-F93C-4125-965D-5A621582273C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2A9CB428-F93C-4125-965D-5A621582273C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7375E751-BF4D-4EE1-B8DA-589B96154A59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7375E751-BF4D-4EE1-B8DA-589B96154A59}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7375E751-BF4D-4EE1-B8DA-589B96154A59}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7375E751-BF4D-4EE1-B8DA-589B96154A59}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

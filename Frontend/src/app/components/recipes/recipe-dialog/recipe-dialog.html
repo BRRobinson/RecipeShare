@@ -1,44 +1,82 @@
-<h2 mat-dialog-title>Edit Recipe</h2>
-<mat-dialog-content>
-    
-    <div class="col-md-6 mb-3">
-    <mat-card appearance="outlined" (click)="this.editRecipe(recipe.id)">
-    <mat-card-header>
-        <mat-card-title>
-            <mat-form-field appearance="fill">
-                <mat-label>Recipe Title</mat-label>
-                <input matInput [(ngModel)]="recipe.title">
-            </mat-form-field>
-        </mat-card-title>
-        <mat-card-subtitle>
-        <p>{{ recipe.cookingTimeMinutes }} Minutes</p>
-        <div class="d-flex flex-wrap" >
-            <p *ngFor="let dietaryTag of recipe.dietaryTags" class="border rounded d-inline-block m-1 px-2 py-1">
-                {{ dietaryTag }}
-            </p>
+<h2 mat-dialog-title>{{ isEdit ? 'Edit' : 'Insert' }} Recipe</h2>
+<form [formGroup]="recipeForm" (ngSubmit)="save()">
+  <mat-dialog-content class="scrollable-content">
+    <!-- title -->
+    <mat-form-field appearance="fill" class="w-100">
+      <mat-label>Title</mat-label>
+      <input matInput formControlName="title">
+      <mat-error *ngIf="recipeForm.get('title')?.hasError('required')">
+        Recipe title is required.
+      </mat-error>
+    </mat-form-field>
+
+    <!-- cookingTime -->
+    <mat-form-field appearance="fill" class="w-100">
+      <mat-label>Cooking Time (minutes)</mat-label>
+      <input matInput type="number" formControlName="cookingTime" min="1">
+      <mat-error *ngIf="recipeForm.get('cookingTime')?.hasError('required')">
+        Cooking time is required.
+      </mat-error>
+      <mat-error *ngIf="recipeForm.get('cookingTime')?.hasError('min')">
+        Cooking time must be at least 1 minute.
+      </mat-error>
+    </mat-form-field>
+
+    <!-- dietaryTags -->
+    <div formArrayName="dietaryTags">
+      <label>Dietary Tags</label>
+      <div class="d-flex flex-wrap w-100">
+        <div class="d-inline-block m-1 w-20" *ngFor="let tagCtrl of dietaryTags.controls; let i = index">
+          <mat-form-field appearance="fill">
+            <input matInput [formControlName]="i" placeholder="Dietary Tag">
+            <button mat-icon-button matSuffix type="button" (click)="removeDietaryTag(i)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </mat-form-field>
         </div>
-        </mat-card-subtitle>
-    </mat-card-header>
+        <button mat-button type="button" (click)="addDietaryTag()">+ Add Tag</button>
+      </div>
+    </div>
     <mat-divider></mat-divider>
-    <mat-card-content class="mt-3">
-        <div>
-        <h5>Ingredients:</h5>
-        <div *ngFor="let ingredient of recipe.ingredients">
-            <p class="secondary me-1">{{ ingredient }}</p>
-        </div>
-        </div>
-        <div>
-        <h5>Steps:</h5>
-        <div *ngFor="let step of recipe.steps">
-            <p class="secondary me-1">{{ step }}</p>
-        </div>
-        </div>
-        <button mat-button (click)="this.deleteRecipe(recipe.id); $event.stopPropagation()">Delete</button>
-    </mat-card-content>
-    </mat-card>
-</div>
-</mat-dialog-content>
-<mat-dialog-actions>
-    <button mat-button (click)="close()">Cancel</button>
-    <button mat-button color="primary" (click)="save()">Save</button>
-</mat-dialog-actions>
+  
+    <!-- ingredients -->
+    <div formArrayName="ingredients">
+      <label>Ingredients</label>
+      <div *ngFor="let ingredientCtrl of ingredients.controls; let i = index">
+        <mat-form-field appearance="fill">
+          <input matInput [formControlName]="i" placeholder="Ingredient">
+          <button mat-icon-button matSuffix type="button" (click)="removeIngredient(i)">
+            <mat-icon>delete</mat-icon>
+          </button>
+          <mat-error *ngIf="ingredientCtrl.hasError('required')">
+            Ingredient is required.
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <button mat-button type="button" (click)="addIngredient()">+ Add Ingredient</button>
+    </div>
+
+    <!-- steps -->
+    <div formArrayName="steps">
+      <label>Steps</label>
+      <div *ngFor="let stepCtrl of steps.controls; let i = index">
+        <mat-form-field appearance="fill">
+          <input matInput [formControlName]="i" placeholder="Step">
+          <button mat-icon-button matSuffix type="button" (click)="removeStep(i)">
+            <mat-icon>delete</mat-icon>
+          </button>
+          <mat-error *ngIf="stepCtrl.hasError('required')">
+            Step is required.
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <button mat-button type="button" (click)="addStep()">+ Add Step</button>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button mat-raised-button type="button" (click)="close()">Cancel</button>
+    <button mat-raised-button color="primary" type="submit" [disabled]="recipeForm.invalid">
+      Save Recipe
+    </button>
+  </mat-dialog-actions>
+</form>
