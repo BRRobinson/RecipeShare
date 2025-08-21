@@ -39,7 +39,8 @@ namespace RecipeShareAPI.Extensions
                 {
                     builder.MigrationsAssembly("RecipeShare.API");
 			    });
-            });
+				options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+			});
 
             services.AddScoped<IRecipeManager, RecipeManager>();
 
