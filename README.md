@@ -6,8 +6,7 @@ Welcome to RecipeShare, a vibrant community where home cooks and food bloggers d
 This project includes a .NET 8 API backend, an Angular 20 frontend, and a MSSQL database running in Docker. You can get the entire stack running using Docker Compose.
 
 ### Prerequisites
-- [Docker](https://www.docker.com/get-started) installed
-- [Docker Compose](https://docs.docker.com/compose/install/) installed
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) installed
 
 ### What will be running
 - mssql/server:2025-latest

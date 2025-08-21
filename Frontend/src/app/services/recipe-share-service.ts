@@ -19,6 +19,10 @@ export class RecipeShareService {
     return this.http.get<ReturnResult<RecipeModel>>(`${this.apiUrl}/recipes/GetRecipeByID/${id}`, );
   }
   
+  getRecipeByDietaryTags(dietaryTag: string): Observable<ReturnResult<RecipeModel[]>> {
+    return this.http.get<ReturnResult<RecipeModel[]>>(`${this.apiUrl}/recipes/GetRecipesByDietaryTags/${dietaryTag}`, );
+  }
+  
   insertRecipe(recipe: RecipeModel): Observable<ReturnResult<RecipeModel>> {
     return this.http.post<ReturnResult<RecipeModel>>(`${this.apiUrl}/recipes`, recipe);
   }

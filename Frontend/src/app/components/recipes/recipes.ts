@@ -9,16 +9,19 @@ import { MatDivider } from '@angular/material/divider';
 import { ReturnResult } from '../../models/return-result.model';
 import { ConfirmDeleteDialog } from '../confirm-delete-dialog/confirm-delete-dialog';
 import { ToastService } from '../../services/toast-service';
+import { FormsModule } from '@angular/forms';
+import { MatLabel } from '@angular/material/form-field';
 
 @Component({
   selector: 'app-recipes',
   standalone: true,
-  imports: [CommonModule, MatCardModule, MatDivider],
+  imports: [CommonModule, MatCardModule, MatDivider, FormsModule, MatLabel],
   templateUrl: './recipes.html',
   styleUrl: './recipes.scss'
 })
 export class Recipes {
-
+  searchValue: string = '';
+  
   constructor(
     private recipeService: RecipeShareService,
     private toastService: ToastService,
@@ -47,6 +50,28 @@ export class Recipes {
         console.error('Failed to fetch recipes', err);
       }
     });
+  }
+
+  search(): void {
+    this.recipeService.getRecipeByDietaryTags(this.searchValue).subscribe({
+      next: (result: ReturnResult<RecipeModel[]>) => {
+        if (!result.isSuccess || !result.value) {
+          this.toastService.show(`Failed to fetch recipes: ${result.message}`);
+          console.error('Failed to fetch recipes:', result.message);
+        } else {
+          this.recipes = result.value;
+        }
+      },
+      error: (err) => {
+        this.toastService.show('Failed to fetch recipes');
+        console.error('Failed to fetch recipes', err);
+      }
+    });
+  }
+
+  clear(): void {
+    this.searchValue = '';
+    this.fetchRecipes();
   }
 
   public insertRecipe(): void {

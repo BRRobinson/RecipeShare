@@ -1,4 +1,9 @@
 <div class="container mt-3">
+  <mat-label>Seach by Dietary Tag</mat-label>
+  <input [(ngModel)]="searchValue" type="text" placeholder="Dietary Tag">
+  <button (click)="search()">Search</button>
+  <button (click)="clear()">Clear</button>
+  <br/>
   <button class="my-3" mat-button (click)="this.insertRecipe()">Insert Recipe</button>
   <div class="row">
     <div class="col-md-6 mb-3" *ngFor="let recipe of recipes">
