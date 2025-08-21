@@ -93,7 +93,7 @@ namespace RecipeShare.Tests
 			var recipe = new Recipe
 			{
 				Title = "Pizza",
-				Ingredients = null!,
+				Ingredients = new List<string>(),
 				Steps = null!,
 				CookingTime = 0,
 				DietaryTags = new List<string> { "Vegetarian" }

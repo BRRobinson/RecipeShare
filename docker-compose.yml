@@ -1,0 +1,45 @@
+version: '3.9'
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2025-latest
+    container_name: sqlserver
+    environment:
+      SA_PASSWORD: "YourStrong!Passw0rd"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+    networks:
+      - backend-network
+
+  api:
+    build:
+      context: Backend
+      dockerfile: Dockerfile
+    image: recipeshare-api:latest
+    container_name: recipeshare-api
+    environment:
+      ConnectionStrings__DefaultConnection: "Server=sqlserver,1433;Database=RecipeDB;User Id=sa;Password=YourStrong!Passw0rd;Encrypt=True;TrustServerCertificate=True;"
+    depends_on:
+      - sqlserver
+    ports:
+      - "8080:8080"
+    networks:
+      - backend-network
+
+  frontend:
+    build:
+      context: Frontend
+      dockerfile: Dockerfile
+    image: recipeshare-frontend:latest
+    container_name: recipeshare-frontend
+    ports:
+      - "4200:80"
+    depends_on:
+      - api
+    networks:
+      - backend-network
+
+networks:
+  backend-network:
+    driver: bridge

@@ -27,7 +27,7 @@ namespace RecipeShare.API.Managers
 
 			return ReturnResult<List<Recipe>>.Success(recipes, "Recipes retrieved successfully.");
 		}
-
+		
 		public ReturnResult<Recipe> GetRecipeByID(int id)
 		{
 			var recipe = _sqlContext.Set<Recipe>().Find(id);
@@ -44,6 +44,9 @@ namespace RecipeShare.API.Managers
 			if (!validateResult.IsSuccess)
 				return validateResult;
 
+			if (_sqlContext.Set<Recipe>().Any(r => r.Title == recipe.Title))
+				return ReturnResult<Recipe>.Failed(default!, $"Recipe with Title {recipe.Title} already exists.");
+
 			_sqlContext.Set<Recipe>().Add(recipe);
 			_sqlContext.SaveChanges();
 
@@ -56,6 +59,10 @@ namespace RecipeShare.API.Managers
 
 			if (!validateResult.IsSuccess)
 				return validateResult;
+
+			var existingRecipeResult = GetRecipeByID(recipe.Id);
+			if (!existingRecipeResult.IsSuccess)
+				return existingRecipeResult;
 
 			_sqlContext.Set<Recipe>().Update(recipe);
 			_sqlContext.SaveChanges();
@@ -81,7 +88,7 @@ namespace RecipeShare.API.Managers
 				return ReturnResult<Recipe>.Failed(default!, "Recipe cannot be null.");
 
 			if (string.IsNullOrWhiteSpace(recipe.Title))
-				return ReturnResult<Recipe>.Failed(recipe, "Recipe title is required.");
+				return ReturnResult<Recipe>.Failed(recipe, "Title is required.");
 
 			if (recipe.Ingredients == null || recipe.Ingredients.Count == 0)
 				return ReturnResult<Recipe>.Failed(recipe, "Ingredients are required.");
